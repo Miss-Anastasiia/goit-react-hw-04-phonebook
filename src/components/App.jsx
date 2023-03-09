@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  ContactForm  from './ContactForm';
+import  ContactForm from './ContactForm';
 import  ContactList  from './ContactList';
 import  Filter  from './Filter';
 import { nanoid } from 'nanoid';
@@ -16,17 +16,46 @@ export class App extends Component {
     filter: '',
   };
 
+   componentDidMount() {
+    const contactsToLocalStorage = localStorage.getItem(
+      'contactsToLocalStorage'
+    );
+
+    if (contactsToLocalStorage) {
+      try {
+        const parseContactList = JSON.parse(contactsToLocalStorage);
+        this.setState({ contacts: parseContactList });
+      } catch {
+        this.setState({ contacts: [] });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(
+        'contactsToLocalStorage',
+        JSON.stringify(this.state.contacts)
+      );
+    }
+  }
+
   formSubmit = ({ name, number }) => {
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-    this.state.contacts.some(
-      i =>(i.name.toLowerCase() === contact.name.toLowerCase() && i.number === contact.number) ||
-      i.name === contact.name || i.number === contact.number
+
+    const enterContacts =  this.state.contacts.some(
+      i =>
+        (i.name.toLowerCase() === contact.name.toLowerCase() &&
+          i.number === contact.number) ||
+        i.name === contact.name ||
+        i.number === contact.number
     )
-      ? alert(`${name} is already in contacts`)
+    enterContacts
+      ? alert(`${name} or ${number} is already in contacts`)
       : this.setState(({ contacts }) => ({
           contacts: [contact, ...contacts],
         }));

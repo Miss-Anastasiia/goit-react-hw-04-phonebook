@@ -11,10 +11,8 @@ const Filter = ({ filter, changeFilterInput }) => (
   </label>
 );
 
-
 Filter.propTypes = {
-    filter: PropTypes.string.isRequired,
-    changeFilterInput:PropTypes.func.isRequired,
-
-}
-export default Filter 
+  filter: PropTypes.string.isRequired,
+  changeFilterInput: PropTypes.func.isRequired,
+};
+export default Filter;
